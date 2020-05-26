@@ -1,16 +1,20 @@
 var theCanvas = document.getElementById("theCanvas");
 var theContext = theCanvas.getContext("2d");
-const radius = 10
-const quarantineSize = 250
+const radius = 15
+const quarantineStart = 500
+let numInQuarantine = 0
+let quarantineMax = 7
+let quarantineFull=false
 
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 class Person {
-    constructor(x, y) {
+    constructor(x, y, id) {
         this.x = x;
         this.y = y;
+        this.id = id
         this.contacts = {}
         this.color = 'red'
         this.isMoving = true
@@ -31,8 +35,8 @@ class Person {
             this.y += getRndInteger(-10, 10);
             if (this.x < radius) {
                 this.x = radius;
-            } else if (this.x > theCanvas.width - radius - quarantineSize) {
-                this.x = theCanvas.width - radius - quarantineSize
+            } else if (this.x > quarantineStart - radius) {
+                this.x = quarantineStart - radius
             }
 
             if (this.y < radius) {
@@ -60,18 +64,25 @@ function handleClick(event) {
     y = event.layerY
     for (person of population) {
         if (x > person.x - radius && x < person.x + radius && y > person.y - radius && y < person.y + radius) {
-            person.isMoving = false;
-            person.x = 700
-            person.y = 50
-            person.color = 'blue'
+            if (numInQuarantine < quarantineMax) {
+                person.isMoving = false;
+                person.x = quarantineStart + (numInQuarantine % 7) * 35 + 20
+                person.y = Math.floor(numInQuarantine / 7) * 35 + 20
+                person.color = 'blue'
+                numInQuarantine++
+            } else {
+                quarantineFull=true
+                window.setTimeout(()=>{quarantineFull=false},1000)
+            }
         }
+
     }
-    //console.log(event)
 }
 
 const population = []
-population.push(new Person(100, 100))
-population.push(new Person(200, 200))
+for (let i = 0; i < 10; i++) {
+    population.push(new Person(i * 50 + 10, i * 50 + 10, i))
+}
 
 function findDist(person1, person2) {
     return Math.sqrt(Math.pow(person1.x - person2.x, 2) + Math.pow(person1.y - person2.y, 2))
@@ -80,7 +91,7 @@ function findDist(person1, person2) {
 function logContacts() {
     for (let i = 0; i < population.length; i++) {
         for (let j = i + 1; j < population.length; j++) {
-            if (findDist(population[i], population[j]) <= 2 * radius) {
+            if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
                 population[i].addContact(j)
                 population[j].addContact(i)
                 console.log('contact made')
@@ -90,27 +101,29 @@ function logContacts() {
 }
 
 function drawBackground() {
-
+    theContext.beginPath()
+    theContext.lineWidth = "5";
+    theContext.strokeStyle = "green";
+    theContext.moveTo(quarantineStart, 0)
+    theContext.lineTo(quarantineStart, theCanvas.height)
+    theContext.stroke()
+    if (quarantineFull) {
+        theContext.textAlign = 'center'
+        theContext.fillStyle='red'
+        theContext.font="50px Arial"
+        theContext.fillText('Quarantine is full', 250, 250)
+    }
 }
 
 function drawCanvas() {
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height)
-
-    theContext.beginPath()
-    theContext.lineWidth = "5";
-    theContext.strokeStyle = "green";
-    theContext.moveTo(500, 0)
-    theContext.lineTo(500, 500)
-    theContext.stroke()
-
-    // theContext.fillStyle='green'
-    //theContext.fillRect(500,0,10,500)
+    drawBackground()
     for (person of population) {
         person.move()
     }
     logContacts()
     theCanvas.onclick = handleClick
-    window.setTimeout(drawCanvas, 1000 / 30)
+    window.setTimeout(drawCanvas, 1000 / 10)
 }
 
 drawCanvas()
