@@ -17,14 +17,12 @@ class Person {
       this.y = y;
       this.contacts = []
     }
-    // Getter
-    get area() {
-      return this.calcArea();
-    }
-    // Method
-    calcArea() {
-      return this.height * this.width;
-    }
+
+    //draw projectile
+
+    //move projectile
+
+    //log contact
   }
 
 
