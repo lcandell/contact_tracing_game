@@ -2,7 +2,7 @@ var theCanvas = document.getElementById("theCanvas");
 var theContext = theCanvas.getContext("2d");
 const radius = 12
 const quarantineStart = 500
-let infectChance = .1
+let infectChance = .03
 let infectTime = 400
 let quarantineFull = false
 const quarantineSpots = []
@@ -22,8 +22,8 @@ class Person {
     constructor(x, y, id) {
         this.x = x;
         this.y = y;
-        this.xVel = getRndInteger(-3, 3)
-        this.yVel = getRndInteger(-3, 3)
+        this.xVel = getRndInteger(-1, 1)
+        this.yVel = getRndInteger(-1, 1)
         this.id = id
         this.contacts = {}
         this.color = 'red'
@@ -168,12 +168,12 @@ function logContacts() {
             if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
                 population[i].addContact(j)
                 population[j].addContact(i)
-                let tempX = population[i].xVel
-                let tempY = population[i].yVel
-                population[i].xVel = population[j].xVel
-                population[i].yVel = population[j].yVel
-                population[j].xVel = tempX
-                population[j].yVel = tempY
+                let tempX = getRndInteger(-1, 1)
+                let tempY = getRndInteger(-1, 1)
+                population[i].xVel = tempX
+                population[i].yVel = tempY
+                population[j].xVel = -tempX
+                population[j].yVel = -tempY
                 infect(population[i], population[j])
             }
         }
