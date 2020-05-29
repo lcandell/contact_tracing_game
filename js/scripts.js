@@ -2,7 +2,7 @@ var theCanvas = document.getElementById("theCanvas");
 var theContext = theCanvas.getContext("2d");
 const radius = 12
 const quarantineStart = 500
-let infectChance = .1
+let infectChance = .2
 let infectTime = 400
 let quarantineFull = false
 const quarantineSpots = []
@@ -167,6 +167,9 @@ function reset() {
     }
     for (let i = 0; i < 2; i++) {
         population[getRndInteger(0, 99)].infectionTime = infectTime
+    }
+    for(spot of quarantineSpots){
+        spot.occupied=false
     }
 }
 
