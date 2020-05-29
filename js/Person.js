@@ -12,6 +12,14 @@ class Person {
         this.quarantinePos = {}
     }
 
+    angle(){
+        return Math.atan2(this.yVel, this.xVel)
+    }
+
+    get speed(){
+        return Math.sqrt(Math.pow(this.xVel,2)+Math.pow(this.yVel,2))
+    }
+
     //draw projectile
     draw() {
         if (this.infectionTime) {
