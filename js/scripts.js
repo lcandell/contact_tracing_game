@@ -2,10 +2,12 @@ var theCanvas = document.getElementById("theCanvas");
 var theContext = theCanvas.getContext("2d");
 const radius = 12
 const quarantineStart = 500
-let infectChance = .03
+let infectChance = .1
 let infectTime = 400
 let quarantineFull = false
 const quarantineSpots = []
+const speed=1.5
+
 for (let i = 0; i < 7; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
@@ -19,11 +21,11 @@ function getRndInteger(min, max) {
 }
 
 class Person {
-    constructor(x, y, id) {
+    constructor(x, y, angle,id) {
         this.x = x;
         this.y = y;
-        this.xVel = getRndInteger(-1, 1)
-        this.yVel = getRndInteger(-1, 1)
+        this.xVel = speed*Math.cos(angle*Math.PI/180)
+        this.yVel = speed*Math.sin(angle*Math.PI/180)
         this.id = id
         this.contacts = {}
         this.color = 'red'
@@ -138,14 +140,6 @@ function handleClick(event) {
     }
 }
 
-let population = []
-for (let i = 0; i < 100; i++) {
-    population.push(new Person(getRndInteger(radius, quarantineStart - radius),
-        getRndInteger(radius, quarantineStart - radius),
-        i))
-}
-population[0].infectionTime = infectTime
-population[1].infectionTime = infectTime
 
 function findDist(person1, person2) {
     return Math.sqrt(Math.pow(person1.x - person2.x, 2) + Math.pow(person1.y - person2.y, 2))
@@ -168,12 +162,12 @@ function logContacts() {
             if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
                 population[i].addContact(j)
                 population[j].addContact(i)
-                let tempX = getRndInteger(-1, 1)
-                let tempY = getRndInteger(-1, 1)
-                population[i].xVel = tempX
-                population[i].yVel = tempY
-                population[j].xVel = -tempX
-                population[j].yVel = -tempY
+                let tempX = population[i].xVel//getRndInteger(-1, 1)
+                let tempY = population[i].yVel//getRndInteger(-1, 1)
+                population[i].xVel = population[j].xVel//tempX
+                population[i].yVel = population[j].yVel//tempY
+                population[j].xVel = tempX//-tempX
+                population[j].yVel = tempY//-tempY
                 infect(population[i], population[j])
             }
         }
@@ -196,14 +190,33 @@ function drawBackground() {
     }
 }
 
+function reset() {
+    population = []
+    for (let i = 0; i < 100; i++) {
+        population.push(new Person(
+            10+radius+50*(i%10),
+            10+radius+50*Math.floor(i/10),
+            getRndInteger(1,360),
+            i)
+        )
+    }
+    for(let i=0;i<2;i++){
+        population[getRndInteger(0,99)].infectionTime = infectTime
+    }
+}
+
 function drawCanvas() {
+
     drawBackground()
     for (person of population) {
         person.move()
     }
     logContacts()
-    theCanvas.onclick = handleClick
     window.setTimeout(drawCanvas, 1000 / 30)
 }
 
+let population = []
+reset()
+theCanvas.onclick = handleClick
+document.getElementById('resetButton').onclick=reset
 drawCanvas()
