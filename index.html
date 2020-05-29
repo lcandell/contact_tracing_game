@@ -15,7 +15,7 @@
 
 <body>
     <div class="container">
-        <h1>Hello world!</h1>
+        <h1>Contact Tracing Game</h1>
 
         <div class="row">
             <div class="col-sm-8 main">
@@ -26,19 +26,67 @@
             <div class="col-sm-4 sidebar">
                 <h2>Parameters</h2>
                 <button id='resetButton'>Reset</button>
+                <button id='LockdownButton'>Lockdown</button>
+                <button id='slowdownButton'>Social Distance</button>
                 <br>
-                <h4>R0</h4>
+                <h4>R0: <span id="r0Value"></span></h4>
                 <div class="slidecontainer">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+                    <input type="range" min="0" max="10" value="5" class="slider" id="r0">
                 </div>
-                <h4>Contact Tracing Adoption</h4>
-                <h4>Percentage Tested</h4>
-                <h4>Quarantine Compliance</h4>
+                <h4>Contact Tracing Adoption: <span id="contactValue"></span>%</h4>
+                <div class="slidecontainer">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="contact">
+                </div>
+                <h4>Testing: <span id="testingValue"></span>%</h4>
+                <div class="slidecontainer">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="testing">
+                </div>
+                <h4>Quarantine Compliance: <span id="complianceValue"></span>%</h4>
+                <div class="slidecontainer">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="compliance">
+                </div>
+                <br>
+                <h2>Legend</h2>
+                
             </div>
           </div>
     </div>
     
+    <script>
+        var slider0 = document.getElementById("r0");
+        var output0 = document.getElementById("r0Value");
+        output0.innerHTML = slider0.value;
 
+        slider0.oninput = function() {
+          output0.innerHTML = this.value;
+        }
+
+        var slider1 = document.getElementById("contact");
+        var output1 = document.getElementById("contactValue");
+        output1.innerHTML = slider1.value;
+
+        slider1.oninput = function() {
+          output1.innerHTML = this.value;
+        }
+
+        var slider2 = document.getElementById("testing");
+        var output2 = document.getElementById("testingValue");
+        output2.innerHTML = slider2.value;
+
+        slider2.oninput = function() {
+          output2.innerHTML = this.value;
+        }
+
+        var slider3 = document.getElementById("compliance");
+        var output3 = document.getElementById("complianceValue");
+        output3.innerHTML = slider3.value;
+
+        slider3.oninput = function() {
+          output3.innerHTML = this.value;
+        }
+        
+        
+        </script>
 
     <script src='js/Person.js'></script>
     <script src="js/scripts.js"></script>
