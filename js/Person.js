@@ -12,7 +12,7 @@ class Person {
         this.quarantinePos = {}
     }
 
-    angle(){
+    get angle(){
         return Math.atan2(this.yVel, this.xVel)
     }
 

@@ -52,15 +52,11 @@ function handleClick(event) {
 }
 
 function ballCollision(person1, person2) {
-    //for (let i=0; i<objArray.length-1; i++) {
-    //for (let j=i+1; j<objArray.length; j++) {
-    //let ob1 = objArray[i]
-    //let ob2 = objArray[j]
     let dist = findDist(person1, person2)
 
     if (dist < 2 * radius) {
-        let theta1 = person1.angle();
-        let theta2 = person2.angle();
+        let theta1 = person1.angle;
+        let theta2 = person2.angle;
         let phi = Math.atan2(person2.y - person1.y, person2.x - person1.x);
         let m1 = radius
         let m2 = radius
