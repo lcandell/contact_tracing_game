@@ -41,14 +41,17 @@ function quarantinePers(person) {
 }
 
 function handleClick(event) {
-    x = event.layerX
-    y = event.layerY
+    let rect=theCanvas.getBoundingClientRect()
+    let x = event.clientX-rect.x
+    let y = event.clientY-rect.y
     for (person of population) {
         if (x > person.x - radius && x < person.x + radius && y > person.y - radius && y < person.y + radius) {
             quarantinePers(person)
         }
 
-    }
+    } 
+    console.log(event)
+    console.log(x+", "+y)
 }
 
 function ballCollision(person1, person2) {
@@ -73,7 +76,7 @@ function ballCollision(person1, person2) {
         person2.xVel = dx2F;
         person2.yVel = dy2F;
 
-        if (person1.speed < speed - .1 || person1.speed> speed + .1) {
+        if (person1.speed < speed - .1 || person1.speed > speed + .1) {
             person1.xVel *= (speed / person1.speed)
             person1.yVel *= (speed / person1.speed)
         }
@@ -168,8 +171,8 @@ function reset() {
     for (let i = 0; i < 2; i++) {
         population[getRndInteger(0, 99)].infectionTime = infectTime
     }
-    for(spot of quarantineSpots){
-        spot.occupied=false
+    for (spot of quarantineSpots) {
+        spot.occupied = false
     }
 }
 
