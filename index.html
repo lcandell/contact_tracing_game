@@ -31,64 +31,25 @@
                 <button id='LockdownButton'>Lockdown</button>
                 <button id='slowdownButton'>Social Distance</button>
                 <br>
-                <h4>R0: <span id="r0Value"></span></h4>
+                <h4>Probablity of inecting: <span id="infectValue"></span></h4>
                 <div class="slidecontainer">
-                    <input type="range" min="0" max="10" value="5" class="slider" id="r0">
+                    <input type="range" min="0" max="1" value=".5" class="slider" step=".01" id="infect" onchange="updateInfection(this.value)">
                 </div>
-                <h4>Contact Tracing Adoption: <span id="contactValue"></span>%</h4>
+                <h4>Infectious period: <span id="periodValue"></span> seconds</h4>
                 <div class="slidecontainer">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="contact">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="period" onchange="updatePeriod(this.value)">
                 </div>
-                <h4>Testing: <span id="testingValue"></span>%</h4>
+                <h4>Testing: <span id="testingValue"></span></h4>
                 <div class="slidecontainer">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="testing">
-                </div>
-                <h4>Quarantine Compliance: <span id="complianceValue"></span>%</h4>
-                <div class="slidecontainer">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="compliance">
+                    <input type="range" min="0" max="1" value=".5" class="slider" step=".01" id="testing" onchange="updateTest(this.value)">
                 </div>
                 <br>
-                <h2>Legend</h2>
                 
+
             </div>
           </div>
     </div>
     
-    <script>
-        var slider0 = document.getElementById("r0");
-        var output0 = document.getElementById("r0Value");
-        output0.innerHTML = slider0.value;
-
-        slider0.oninput = function() {
-          output0.innerHTML = this.value;
-        }
-
-        var slider1 = document.getElementById("contact");
-        var output1 = document.getElementById("contactValue");
-        output1.innerHTML = slider1.value;
-
-        slider1.oninput = function() {
-          output1.innerHTML = this.value;
-        }
-
-        var slider2 = document.getElementById("testing");
-        var output2 = document.getElementById("testingValue");
-        output2.innerHTML = slider2.value;
-
-        slider2.oninput = function() {
-          output2.innerHTML = this.value;
-        }
-
-        var slider3 = document.getElementById("compliance");
-        var output3 = document.getElementById("complianceValue");
-        output3.innerHTML = slider3.value;
-
-        slider3.oninput = function() {
-          output3.innerHTML = this.value;
-        }
-        
-        
-        </script>
 
     <script src='js/Person.js'></script>
     <script src="js/scripts.js"></script>

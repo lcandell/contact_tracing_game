@@ -10,6 +10,7 @@ class Person {
         this.isMoving = true
         this.infectionTime = 0
         this.quarantinePos = {}
+        this.tested = false
     }
 
     get angle(){
@@ -22,10 +23,10 @@ class Person {
 
     //draw projectile
     draw() {
-        if (this.infectionTime) {
-            this.color = 'purple'
-        } else {
+        if (this.tested) {
             this.color = 'red'
+        } else {
+            this.color = '#7da7ab'
         }
         theContext.beginPath();
         theContext.arc(this.x, this.y, radius, 0, 2 * Math.PI);

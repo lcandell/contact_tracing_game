@@ -1,14 +1,23 @@
+document.getElementById("infectValue").innerHTML = document.getElementById("infect").value;
+document.getElementById("periodValue").innerHTML = document.getElementById("period").value;
+document.getElementById("testingValue").innerHTML = document.getElementById("testing").value;
+
 var theCanvas = document.getElementById("theCanvas");
 var theContext = theCanvas.getContext("2d");
 const radius = 12
+const fps = 10
 const quarantineStart = 500
-let infectChance = .2
-let infectTime = 400
+let infectChance = document.getElementById("infect").value
+let testChance = document.getElementById("testing").value
+let infectTime = document.getElementById("period").value*fps
 let quarantineFull = false
 const quarantineSpots = []
 const speed = 1.5
 
-for (let i = 0; i < 7; i++) {
+
+
+
+for (let i = 0; i < 14; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
         y: Math.floor(i / 7) * 35 + 20,
@@ -18,6 +27,21 @@ for (let i = 0; i < 7; i++) {
 
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function updateInfection(value){
+    infectChance = document.getElementById("infect").value
+    document.getElementById("infectValue").innerHTML = infectChance
+}
+
+function updatePeriod(value){
+    infectTime = document.getElementById("period").value*fps
+    document.getElementById("periodValue").innerHTML = document.getElementById("period").value
+}
+
+function updateTest(value){
+    testChance = document.getElementById("testing").value
+    document.getElementById("testingValue").innerHTML = testChance
 }
 
 function quarantinePers(person) {
@@ -52,6 +76,7 @@ function handleClick(event) {
     } 
     console.log(event)
     console.log(x+", "+y)
+    console.log(infectChance)
 }
 
 function ballCollision(person1, person2) {
@@ -121,10 +146,13 @@ function findDist(person1, person2) {
 function infect(person1, person2) {
     let chance = Math.random()
     if (chance < infectChance) {
+        let tested = Math.random()
         if (person1.infectionTime && !person2.infectionTime) {
             person2.infectionTime = infectTime;
+            person2.tested = tested < testChance
         } else if (person2.infectionTime && !person1.infectionTime) {
             person1.infectionTime = infectTime;
+            person1.tested = tested < testChance
         }
     }
 }
@@ -183,7 +211,7 @@ function drawCanvas() {
         person.move()
     }
     logContacts()
-    window.setTimeout(drawCanvas, 1000 / 30)
+    window.setTimeout(drawCanvas, 1000 / fps)
 }
 
 let population = []
