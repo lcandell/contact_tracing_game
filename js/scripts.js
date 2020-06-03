@@ -2,17 +2,30 @@ document.getElementById("infectValue").innerHTML = document.getElementById("infe
 document.getElementById("periodValue").innerHTML = document.getElementById("period").value;
 document.getElementById("testingValue").innerHTML = document.getElementById("testing").value;
 
-var theCanvas = document.getElementById("theCanvas");
-var theContext = theCanvas.getContext("2d");
+let theCanvas = document.getElementById("theCanvas");
+let theContext = theCanvas.getContext("2d");
+let graph = document.getElementById("graph")
+let graphContext = graph.getContext("2d")
 const radius = 12
 const fps = 10
 const quarantineStart = 500
 let infectChance = document.getElementById("infect").value
 let testChance = document.getElementById("testing").value
-let infectTime = document.getElementById("period").value*fps
+let infectTime = document.getElementById("period").value * fps
 let quarantineFull = false
 const quarantineSpots = []
 const speed = 1.5
+let time = 0
+let day = 1
+const todayInfects = {
+    tested: 0,
+    untested: 0
+}
+
+let dailyInfects = [{
+    tested: 0,
+    untested: 2
+}]
 
 
 
@@ -29,17 +42,17 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function updateInfection(value){
+function updateInfection(value) {
     infectChance = document.getElementById("infect").value
     document.getElementById("infectValue").innerHTML = infectChance
 }
 
-function updatePeriod(value){
-    infectTime = document.getElementById("period").value*fps
+function updatePeriod(value) {
+    infectTime = document.getElementById("period").value * fps
     document.getElementById("periodValue").innerHTML = document.getElementById("period").value
 }
 
-function updateTest(value){
+function updateTest(value) {
     testChance = document.getElementById("testing").value
     document.getElementById("testingValue").innerHTML = testChance
 }
@@ -65,17 +78,17 @@ function quarantinePers(person) {
 }
 
 function handleClick(event) {
-    let rect=theCanvas.getBoundingClientRect()
-    let x = event.clientX-rect.x
-    let y = event.clientY-rect.y
+    let rect = theCanvas.getBoundingClientRect()
+    let x = event.clientX - rect.x
+    let y = event.clientY - rect.y
     for (person of population) {
         if (x > person.x - radius && x < person.x + radius && y > person.y - radius && y < person.y + radius) {
             quarantinePers(person)
         }
 
-    } 
+    }
     console.log(event)
-    console.log(x+", "+y)
+    console.log(x + ", " + y)
     console.log(infectChance)
 }
 
@@ -149,10 +162,20 @@ function infect(person1, person2) {
         let tested = Math.random()
         if (person1.infectionTime && !person2.infectionTime) {
             person2.infectionTime = infectTime;
-            person2.tested = tested < testChance
+            if (tested < testChance) {
+                person2.tested = true
+                todayInfects.tested++
+            } else {
+                todayInfects.untested++
+            }
         } else if (person2.infectionTime && !person1.infectionTime) {
             person1.infectionTime = infectTime;
-            person1.tested = tested < testChance
+            if (tested < testChance) {
+                person1.tested = true
+                todayInfects.tested++
+            } else {
+                todayInfects.untested++
+            }
         }
     }
 }
@@ -170,6 +193,16 @@ function logContacts() {
     }
 }
 
+function incrementTime() {
+    time++
+    if (time % (fps*1.5) === 0) {
+        day++
+        dailyInfects.push({ ...todayInfects })
+        todayInfects.tested = 0
+        todayInfects.untested = 0
+    }
+}
+
 function drawBackground() {
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height)
     theContext.beginPath()
@@ -178,6 +211,10 @@ function drawBackground() {
     theContext.moveTo(quarantineStart, 0)
     theContext.lineTo(quarantineStart, theCanvas.height)
     theContext.stroke()
+    theContext.textAlign = 'center'
+    theContext.fillStyle = 'red'
+    theContext.font = "25px Arial"
+    theContext.fillText(day, 600, 400)
     if (quarantineFull) {
         theContext.textAlign = 'center'
         theContext.fillStyle = 'red'
@@ -202,6 +239,43 @@ function reset() {
     for (spot of quarantineSpots) {
         spot.occupied = false
     }
+    time = 0
+    day = 1
+    dailyInfects = [{ tested: 0, untested: 2 }]
+    todayInfects.tested = 0
+    todayInfects.untested = 0
+}
+
+function drawGraph() {
+    graphContext.clearRect(0, 0, graph.width, graph.height)
+    let dayWidth = (graph.width - 10) / dailyInfects.length
+    let infectHeight = (graph.height - 10) / 15
+    for (let i = 0; i < dailyInfects.length; i++) {
+        graphContext.fillStyle='red'
+        graphContext.fillRect(
+            7 + (i * dayWidth),
+            graph.height - 5 - (dailyInfects[i].tested * infectHeight),
+            dayWidth,
+            (dailyInfects[i].tested * infectHeight)
+        )
+        graphContext.fillStyle='#ffa5a5'
+        graphContext.fillRect(
+            7 + (i * dayWidth),
+            graph.height - 5 - (dailyInfects[i].tested * infectHeight)-(dailyInfects[i].untested*infectHeight),
+            dayWidth,
+            (dailyInfects[i].untested * infectHeight)
+        )
+    }
+    graphContext.beginPath()
+    graphContext.lineWidth = "1";
+    graphContext.strokeStyle = "green";
+    graphContext.moveTo(5, 0)
+    graphContext.lineTo(5, graph.height)
+    graphContext.stroke()
+    graphContext.beginPath()
+    graphContext.moveTo(0, graph.height - 5)
+    graphContext.lineTo(graph.width, graph.height - 5)
+    graphContext.stroke()
 }
 
 function drawCanvas() {
@@ -210,7 +284,9 @@ function drawCanvas() {
     for (person of population) {
         person.move()
     }
+    drawGraph()
     logContacts()
+    incrementTime()
     window.setTimeout(drawCanvas, 1000 / fps)
 }
 
