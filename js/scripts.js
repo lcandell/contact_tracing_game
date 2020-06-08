@@ -197,7 +197,9 @@ function incrementTime() {
     time++
     if (time % (fps*1.5) === 0) {
         day++
-        dailyInfects.push({ ...todayInfects })
+        if (dailtInfects.length<100) {
+            dailyInfects.push({ ...todayInfects })
+        }
         todayInfects.tested = 0
         todayInfects.untested = 0
     }
