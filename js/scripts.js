@@ -1,6 +1,7 @@
 document.getElementById("infectValue").innerHTML = document.getElementById("infect").value;
 document.getElementById("periodValue").innerHTML = document.getElementById("period").value;
 document.getElementById("testingValue").innerHTML = document.getElementById("testing").value;
+document.getElementById("interactRate").innerHTML = document.getElementById("rate").value;
 
 let theCanvas = document.getElementById("theCanvas");
 let theContext = theCanvas.getContext("2d");
@@ -14,7 +15,7 @@ let testChance = document.getElementById("testing").value
 let infectTime = document.getElementById("period").value * fps
 let quarantineFull = false
 const quarantineSpots = []
-const speed = 1.5
+let speed = document.getElementById("rate").value
 let time = 0
 let day = 1
 const todayInfects = {
@@ -55,6 +56,11 @@ function updatePeriod(value) {
 function updateTest(value) {
     testChance = document.getElementById("testing").value
     document.getElementById("testingValue").innerHTML = testChance
+}
+
+function updateRate(value) {
+    speed = document.getElementById("rate").value
+    document.getElementById("interactRate").innerHTML = speed
 }
 
 function quarantinePers(person) {
@@ -197,7 +203,7 @@ function incrementTime() {
     time++
     if (time % (fps*1.5) === 0) {
         day++
-        if (dailtInfects.length<100) {
+        if (dailyInfects.length<100) {
             dailyInfects.push({ ...todayInfects })
         }
         todayInfects.tested = 0
