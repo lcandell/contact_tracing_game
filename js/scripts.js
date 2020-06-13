@@ -203,7 +203,7 @@ function incrementTime() {
     time++
     if (time % (fps) === 0) {
         day++
-        if (dailyInfects.length<100) {
+        if (dailyInfects.length<365) {
             dailyInfects.push({ ...todayInfects })
         }
         todayInfects.tested = 0
