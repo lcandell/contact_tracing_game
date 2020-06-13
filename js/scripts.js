@@ -188,11 +188,6 @@ function infect(person1, person2) {
 
 function logContacts() {
     for (let i = 0; i < population.length; i++) {
-        //test periodic testing
-        if ((i%20)*fps===time%(20*fps) && population[i].infectionTime>0){
-            population[i].tested=true
-            quarantinePers(population[i])
-        }
         for (let j = i + 1; j < population.length; j++) {
             if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
                 population[i].addContact(j)
@@ -204,10 +199,25 @@ function logContacts() {
     }
 }
 
+function testPeople(){
+    for(let i=0;i<population.length;i++){
+        if(i%20===day%20){
+            if(population[i].infectionTime>0){
+                population[i].tested=true
+                if(!population[i].quarantinePos){
+                    console.log(i)
+                    quarantinePers(population[i])
+                }
+            }
+        }
+    }
+}
+
 function incrementTime() {
     time++
     if (time % (fps) === 0) {
         day++
+        testPeople()
         if (dailyInfects.length<365) {
             dailyInfects.push({ ...todayInfects })
         }

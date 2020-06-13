@@ -9,7 +9,7 @@ class Person {
         this.color = 'red'
         this.isMoving = true
         this.infectionTime = 0
-        this.quarantinePos = {}
+        this.quarantinePos = false
         this.tested = false
     }
 
@@ -80,7 +80,9 @@ class Person {
     }
 
     remove() {
-        this.quarantinePos.occupied = false
+        if (this.quarantinePos){
+            this.quarantinePos.occupied = false
+        }
         population = population.filter((pers) => {
             return pers.id !== this.id
         })
