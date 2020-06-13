@@ -31,7 +31,7 @@ let dailyInfects = [{
 
 
 
-for (let i = 0; i < 14; i++) {
+for (let i = 0; i < 21; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
         y: Math.floor(i / 7) * 35 + 20,
