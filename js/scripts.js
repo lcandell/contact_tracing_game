@@ -201,7 +201,7 @@ function logContacts() {
 
 function incrementTime() {
     time++
-    if (time % (fps*1.5) === 0) {
+    if (time % (fps) === 0) {
         day++
         if (dailyInfects.length<100) {
             dailyInfects.push({ ...todayInfects })
