@@ -7,6 +7,8 @@ let theCanvas = document.getElementById("theCanvas");
 let theContext = theCanvas.getContext("2d");
 let graph = document.getElementById("graph")
 let graphContext = graph.getContext("2d")
+let doTesting=true
+let testInterval=20
 const radius = 12
 const fps = 10
 const quarantineStart = 500
@@ -31,7 +33,7 @@ let dailyInfects = [{
 
 
 
-for (let i = 0; i < 21; i++) {
+for (let i = 0; i < 42; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
         y: Math.floor(i / 7) * 35 + 20,
@@ -201,7 +203,7 @@ function logContacts() {
 
 function testPeople(){
     for(let i=0;i<population.length;i++){
-        if(i%20===day%20){
+        if(i%testInterval===day%testInterval){
             if(population[i].infectionTime>0){
                 population[i].tested=true
                 if(!population[i].quarantinePos){
@@ -217,7 +219,9 @@ function incrementTime() {
     time++
     if (time % (fps) === 0) {
         day++
-        testPeople()
+        if (doTesting){
+            testPeople()
+        }
         if (dailyInfects.length<365) {
             dailyInfects.push({ ...todayInfects })
         }
