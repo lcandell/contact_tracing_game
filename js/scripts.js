@@ -95,9 +95,9 @@ function handleClick(event) {
         }
 
     }
-    console.log(event)
-    console.log(x + ", " + y)
-    console.log(infectChance)
+    //console.log(event)
+    //console.log(x + ", " + y)
+    //console.log(infectChance)
 }
 
 function ballCollision(person1, person2) {
@@ -202,14 +202,11 @@ function logContacts() {
 }
 
 function testPeople(){
-    for(let i=0;i<population.length;i++){
-        if(i%testInterval===day%testInterval){
-            if(population[i].infectionTime>0){
-                population[i].tested=true
-                if(!population[i].quarantinePos){
-                    console.log(i)
-                    quarantinePers(population[i])
-                }
+    for(let i=day%testInterval;i<population.length;i+=testInterval){
+        if(population[i].infectionTime>0){
+            population[i].tested=true
+            if(!population[i].quarantinePos){
+                quarantinePers(population[i])
             }
         }
     }
