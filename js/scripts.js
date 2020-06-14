@@ -235,10 +235,7 @@ function drawBackground() {
     theContext.moveTo(quarantineStart, 0)
     theContext.lineTo(quarantineStart, theCanvas.height)
     theContext.stroke()
-    theContext.textAlign = 'center'
-    theContext.fillStyle = 'red'
-    theContext.font = "25px Arial"
-    theContext.fillText(day, 600, 400)
+ 
     if (quarantineFull) {
         theContext.textAlign = 'center'
         theContext.fillStyle = 'red'
@@ -300,6 +297,10 @@ function drawGraph() {
     graphContext.moveTo(0, graph.height - 5)
     graphContext.lineTo(graph.width, graph.height - 5)
     graphContext.stroke()
+    graphContext.textAlign = 'right'
+    graphContext.fillStyle = 'red'
+    graphContext.font = "25px Arial"
+    graphContext.fillText(day, 290, 30)
 }
 
 function drawCanvas() {
