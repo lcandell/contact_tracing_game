@@ -7,6 +7,8 @@ let theCanvas = document.getElementById("theCanvas");
 let theContext = theCanvas.getContext("2d");
 let graph = document.getElementById("graph")
 let graphContext = graph.getContext("2d")
+let doTesting=false
+let testInterval=20
 const radius = 12
 const fps = 10
 const quarantineStart = 500
@@ -31,7 +33,7 @@ let dailyInfects = [{
 
 
 
-for (let i = 0; i < 14; i++) {
+for (let i = 0; i < 42; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
         y: Math.floor(i / 7) * 35 + 20,
@@ -93,9 +95,9 @@ function handleClick(event) {
         }
 
     }
-    console.log(event)
-    console.log(x + ", " + y)
-    console.log(infectChance)
+    //console.log(event)
+    //console.log(x + ", " + y)
+    //console.log(infectChance)
 }
 
 function ballCollision(person1, person2) {
@@ -199,10 +201,24 @@ function logContacts() {
     }
 }
 
+function testPeople(){
+    for(let i=day%testInterval;i<population.length;i+=testInterval){
+        if(population[i].infectionTime>0){
+            population[i].tested=true
+            if(!population[i].quarantinePos){
+                quarantinePers(population[i])
+            }
+        }
+    }
+}
+
 function incrementTime() {
     time++
     if (time % (fps) === 0) {
         day++
+        if (doTesting){
+            testPeople()
+        }
         if (dailyInfects.length<365) {
             dailyInfects.push({ ...todayInfects })
         }
@@ -219,10 +235,7 @@ function drawBackground() {
     theContext.moveTo(quarantineStart, 0)
     theContext.lineTo(quarantineStart, theCanvas.height)
     theContext.stroke()
-    theContext.textAlign = 'center'
-    theContext.fillStyle = 'red'
-    theContext.font = "25px Arial"
-    theContext.fillText(day, 600, 400)
+ 
     if (quarantineFull) {
         theContext.textAlign = 'center'
         theContext.fillStyle = 'red'
@@ -284,6 +297,10 @@ function drawGraph() {
     graphContext.moveTo(0, graph.height - 5)
     graphContext.lineTo(graph.width, graph.height - 5)
     graphContext.stroke()
+    graphContext.textAlign = 'right'
+    graphContext.fillStyle = 'red'
+    graphContext.font = "25px Arial"
+    graphContext.fillText(day, 290, 30)
 }
 
 function drawCanvas() {
