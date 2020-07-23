@@ -8,6 +8,7 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
 
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" ></script>
   <link href="css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -45,12 +46,51 @@
                 <div class="slidecontainer">
                     <input type="range" min="0" max="1" value=".5" class="slider" step=".01" id="testing" oninput="updateTest(this.value)">
                 </div>
-                <h4>Periodic Test Interval: <span id="testInt"></span></h4>
+                <h4>Periodic Test Interval (seconds): <span id="testInt"></span></h4>
                 <div class="slidecontainer">
                     <input type="range" min="0" max="60" value="0" class="slider" step="1" id="testPer" oninput="updateTestPer(this.value)">
                 </div>
                 <br>
                 <canvas id="graph" width="300" height="200"></canvas>
+                <script>
+                    let myChart = document.getElementById("graph").getContext('2d');
+                    let infectChart = new Chart(myChart, {
+                        type : "bar",
+                        data : {
+                            labels: [],
+                            datasets: [
+                                {
+                                label : 'Documented',
+                                data : [],
+                                backgroundColor: "red",
+                                hoverBorderWidth : 1,
+                                hoverBorderColor : '#000'
+                                },
+                                {
+                                label : 'Undocumented',
+                                data : [],
+                                backgroundColor: "pink",
+                                hoverBorderWidth : 1,
+                                hoverBorderColor : '#000'
+                                },
+                                
+                            ]},
+                        options:{
+                            tooltips: {
+						        mode: 'index',
+                                intersect: false
+                            },
+                            scales: {
+						        xAxes: [{
+							        stacked: true,
+						        }],
+						        yAxes: [{
+							        stacked: true
+                                }]
+                            }   
+                        }
+                        });
+                </script>
 
 
             </div>

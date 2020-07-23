@@ -26,14 +26,6 @@ const todayInfects = {
     untested: 0
 }
 
-let dailyInfects = [{
-    tested: 0,
-    untested: 2
-}]
-
-
-
-
 for (let i = 0; i < 42; i++) {
     quarantineSpots.push({
         x: quarantineStart + (i % 7) * 35 + 20,
@@ -226,8 +218,11 @@ function incrementTime() {
         if (doTesting) {
             testPeople()
         }
-        if (dailyInfects.length < 365) {
-            dailyInfects.push({ ...todayInfects })
+        if (infectChart.data.labels.length < 365) {
+            infectChart.data.labels.push(day)
+            infectChart.data.datasets[0].data.push(todayInfects.tested)
+            infectChart.data.datasets[1].data.push(todayInfects.untested)
+            infectChart.update()
         }
         todayInfects.tested = 0
         todayInfects.untested = 0
@@ -268,47 +263,15 @@ function reset() {
         spot.occupied = false
     }
     time = 0
-    day = 1
-    dailyInfects = [{ tested: 0, untested: 2 }]
+    day = 0
+    infectChart.data.labels=[day]
+    infectChart.data.datasets[0].data=[0]
+    infectChart.data.datasets[1].data=[2]
+    infectChart.update()
     todayInfects.tested = 0
     todayInfects.untested = 0
 }
 
-function drawGraph() {
-    graphContext.clearRect(0, 0, graph.width, graph.height)
-    let dayWidth = (graph.width - 10) / dailyInfects.length
-    let infectHeight = (graph.height - 10) / 15
-    for (let i = 0; i < dailyInfects.length; i++) {
-        graphContext.fillStyle = 'red'
-        graphContext.fillRect(
-            7 + (i * dayWidth),
-            graph.height - 5 - (dailyInfects[i].tested * infectHeight),
-            dayWidth,
-            (dailyInfects[i].tested * infectHeight)
-        )
-        graphContext.fillStyle = '#ffa5a5'
-        graphContext.fillRect(
-            7 + (i * dayWidth),
-            graph.height - 5 - (dailyInfects[i].tested * infectHeight) - (dailyInfects[i].untested * infectHeight),
-            dayWidth,
-            (dailyInfects[i].untested * infectHeight)
-        )
-    }
-    graphContext.beginPath()
-    graphContext.lineWidth = "1";
-    graphContext.strokeStyle = "green";
-    graphContext.moveTo(5, 0)
-    graphContext.lineTo(5, graph.height)
-    graphContext.stroke()
-    graphContext.beginPath()
-    graphContext.moveTo(0, graph.height - 5)
-    graphContext.lineTo(graph.width, graph.height - 5)
-    graphContext.stroke()
-    graphContext.textAlign = 'right'
-    graphContext.fillStyle = 'red'
-    graphContext.font = "25px Arial"
-    graphContext.fillText(day, 290, 30)
-}
 
 function drawCanvas() {
 
@@ -316,7 +279,6 @@ function drawCanvas() {
     for (person of population) {
         person.move()
     }
-    drawGraph()
     logContacts()
     incrementTime()
     window.setTimeout(drawCanvas, 1000 / fps)
