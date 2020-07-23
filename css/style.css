@@ -21,3 +21,11 @@
   canvas{
       background-color: honeydew;
   }
+
+  h2 {
+    margin: 0;
+      display: inline-block;
+  }
+  button {
+    float: right;
+  }

@@ -2,13 +2,14 @@ document.getElementById("infectValue").innerHTML = document.getElementById("infe
 document.getElementById("periodValue").innerHTML = document.getElementById("period").value;
 document.getElementById("testingValue").innerHTML = document.getElementById("testing").value;
 document.getElementById("interactRate").innerHTML = document.getElementById("rate").value;
+document.getElementById("testInt").innerHTML = document.getElementById("testPer").value;
 
 let theCanvas = document.getElementById("theCanvas");
 let theContext = theCanvas.getContext("2d");
 let graph = document.getElementById("graph")
 let graphContext = graph.getContext("2d")
-let doTesting=false
-let testInterval=20
+let testInterval = parseInt(document.getElementById("testPer").value)
+let doTesting = (testInterval > 0)
 const radius = 12
 const fps = 10
 const quarantineStart = 500
@@ -58,6 +59,12 @@ function updatePeriod(value) {
 function updateTest(value) {
     testChance = document.getElementById("testing").value
     document.getElementById("testingValue").innerHTML = testChance
+}
+
+function updateTestPer(value) {
+    testInterval = parseInt(document.getElementById("testPer").value);
+    doTesting = (testInterval > 0);
+    document.getElementById("testInt").innerHTML = doTesting ? testInterval : "Off";
 }
 
 function updateRate(value) {
@@ -201,11 +208,11 @@ function logContacts() {
     }
 }
 
-function testPeople(){
-    for(let i=day%testInterval;i<population.length;i+=testInterval){
-        if(population[i].infectionTime>0){
-            population[i].tested=true
-            if(!population[i].quarantinePos){
+function testPeople() {
+    for (let i = day % testInterval; i < population.length; i += testInterval) {
+        if (population[i].infectionTime > 0) {
+            population[i].tested = true
+            if (!population[i].quarantinePos) {
                 quarantinePers(population[i])
             }
         }
@@ -216,10 +223,10 @@ function incrementTime() {
     time++
     if (time % (fps) === 0) {
         day++
-        if (doTesting){
+        if (doTesting) {
             testPeople()
         }
-        if (dailyInfects.length<365) {
+        if (dailyInfects.length < 365) {
             dailyInfects.push({ ...todayInfects })
         }
         todayInfects.tested = 0
@@ -235,7 +242,7 @@ function drawBackground() {
     theContext.moveTo(quarantineStart, 0)
     theContext.lineTo(quarantineStart, theCanvas.height)
     theContext.stroke()
- 
+
     if (quarantineFull) {
         theContext.textAlign = 'center'
         theContext.fillStyle = 'red'
@@ -272,17 +279,17 @@ function drawGraph() {
     let dayWidth = (graph.width - 10) / dailyInfects.length
     let infectHeight = (graph.height - 10) / 15
     for (let i = 0; i < dailyInfects.length; i++) {
-        graphContext.fillStyle='red'
+        graphContext.fillStyle = 'red'
         graphContext.fillRect(
             7 + (i * dayWidth),
             graph.height - 5 - (dailyInfects[i].tested * infectHeight),
             dayWidth,
             (dailyInfects[i].tested * infectHeight)
         )
-        graphContext.fillStyle='#ffa5a5'
+        graphContext.fillStyle = '#ffa5a5'
         graphContext.fillRect(
             7 + (i * dayWidth),
-            graph.height - 5 - (dailyInfects[i].tested * infectHeight)-(dailyInfects[i].untested*infectHeight),
+            graph.height - 5 - (dailyInfects[i].tested * infectHeight) - (dailyInfects[i].untested * infectHeight),
             dayWidth,
             (dailyInfects[i].untested * infectHeight)
         )
