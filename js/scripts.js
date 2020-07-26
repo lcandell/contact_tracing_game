@@ -218,10 +218,10 @@ function incrementTime() {
         if (doTesting) {
             testPeople()
         }
-        if (infectChart.data.labels.length < 365) {
-            infectChart.data.labels.push(day)
-            infectChart.data.datasets[0].data.push(todayInfects.tested)
-            infectChart.data.datasets[1].data.push(todayInfects.untested)
+        if (day < 60) {
+            //infectChart.data.labels.push(day)
+            infectChart.data.datasets[0].data[day]+=todayInfects.tested
+            infectChart.data.datasets[1].data[day]+=todayInfects.untested
             infectChart.update()
         }
         todayInfects.tested = 0
@@ -264,9 +264,9 @@ function reset() {
     }
     time = 0
     day = 0
-    infectChart.data.labels=[day]
-    infectChart.data.datasets[0].data=[0]
-    infectChart.data.datasets[1].data=[2]
+    //infectChart.data.labels=[day]
+    //infectChart.data.datasets[0].data=[0]
+    infectChart.data.datasets[1].data[0]+=2
     infectChart.update()
     todayInfects.tested = 0
     todayInfects.untested = 0
@@ -281,7 +281,7 @@ function drawCanvas() {
     }
     logContacts()
     incrementTime()
-    window.setTimeout(drawCanvas, 1000 / fps)
+    window.setTimeout(drawCanvas, 1 / fps)
 }
 
 let population = []

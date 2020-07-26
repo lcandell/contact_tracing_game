@@ -57,18 +57,18 @@
                     let infectChart = new Chart(myChart, {
                         type : "bar",
                         data : {
-                            labels: [],
+                            labels: [...Array(60).keys()],
                             datasets: [
                                 {
                                 label : 'Documented',
-                                data : [],
+                                data : new Array(60).fill(0),
                                 backgroundColor: "red",
                                 hoverBorderWidth : 1,
                                 hoverBorderColor : '#000'
                                 },
                                 {
                                 label : 'Undocumented',
-                                data : [],
+                                data : new Array(60).fill(0),
                                 backgroundColor: "pink",
                                 hoverBorderWidth : 1,
                                 hoverBorderColor : '#000'
@@ -77,15 +77,15 @@
                             ]},
                         options:{
                             tooltips: {
-						        mode: 'index',
+                                mode: 'index',
                                 intersect: false
                             },
                             scales: {
-						        xAxes: [{
-							        stacked: true,
-						        }],
-						        yAxes: [{
-							        stacked: true
+                                xAxes: [{
+                                    stacked: true,
+                                }],
+                                yAxes: [{
+                                    stacked: true
                                 }]
                             }   
                         }
