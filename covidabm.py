@@ -7,11 +7,11 @@ radius = 12
 gridsize = 500
 sps = 10
 
-
+N=100
 infHist=[0]*101
 infPer=20
 infProb=0.5
-speed=3
+speed=.8
 people={}
 infected={}
 
@@ -21,6 +21,9 @@ def dst(p1,p2):
 def move(person):
     person['x']+=speed*math.cos(person['ang'])
     person['y']+=speed*math.sin(person['ang'])
+    if person['id']==spreader:
+        person['x']+=9*speed*math.cos(person['ang'])
+        person['y']+=9*speed*math.sin(person['ang'])
     
     if person['x']<radius:
         if math.cos(person['ang'])<0:
@@ -47,10 +50,10 @@ def ballCollision(person1, person2):
         phi = math.atan2(person2['y'] - person1['y'], person2['x'] - person1['x'])
         v = speed
 
-        dx1F =  v * math.cos(theta2 - phi) * math.cos(phi) + v * math.sin(theta1 - phi) * math.cos(phi + math.pi / 2)
-        dy1F =  v * math.cos(theta2 - phi) * math.sin(phi) + v * math.sin(theta1 - phi) * math.sin(phi + math.pi / 2)
-        dx2F =  v * math.cos(theta1 - phi) * math.cos(phi) + v * math.sin(theta2 - phi) * math.cos(phi + math.pi / 2)
-        dy2F =  v * math.cos(theta1 - phi) * math.sin(phi) + v * math.sin(theta2 - phi) * math.sin(phi + math.pi / 2)
+        dx1F =  math.cos(theta2 - phi) * math.cos(phi) + math.sin(theta1 - phi) * math.cos(phi + math.pi / 2)
+        dy1F =  math.cos(theta2 - phi) * math.sin(phi) + math.sin(theta1 - phi) * math.sin(phi + math.pi / 2)
+        dx2F =  math.cos(theta1 - phi) * math.cos(phi) + math.sin(theta2 - phi) * math.cos(phi + math.pi / 2)
+        dy2F =  math.cos(theta1 - phi) * math.sin(phi) + math.sin(theta2 - phi) * math.sin(phi + math.pi / 2)
 
         person1['ang']=math.atan2(dy1F,dx1F)
         person2['ang']=math.atan2(dy2F,dx2F)
@@ -77,7 +80,7 @@ def infect(t):
         del infected[o]	
 
 
-for it in range(500):
+for it in range(N):
     print it
     people={j:{'id':j,'iTime':0.0, 'x':(j%10)*50+22,'y':(j/10)*50+22,'ang':random.randrange(360)*math.pi/180} for j in range(100)}
     infected = {}
@@ -92,6 +95,7 @@ for it in range(500):
     del people[i1]
     del people[i2]
     infHist[0]+=2
+    spreader =random.randrange(100)
     t=0
     while t<100*sps and len(infected)>0:
         #print t,len(infected)
@@ -114,4 +118,4 @@ for it in range(500):
         t+=1
                     
 for k in range(100):
-    print k,infHist[k]/5.0
+    print k,infHist[k]/float(N)
