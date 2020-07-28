@@ -106,29 +106,18 @@ function ballCollision(person1, person2) {
         let theta1 = person1.angle;
         let theta2 = person2.angle;
         let phi = Math.atan2(person2.y - person1.y, person2.x - person1.x);
-        let m1 = radius
-        let m2 = radius
-        let v1 = speed
-        let v2 = speed
+        let v1 = person1.speed
+        let v2 = person2.speed
 
-        let dx1F = (v1 * Math.cos(theta1 - phi) * (m1 - m2) + 2 * m2 * v2 * Math.cos(theta2 - phi)) / (m1 + m2) * Math.cos(phi) + v1 * Math.sin(theta1 - phi) * Math.cos(phi + Math.PI / 2);
-        let dy1F = (v1 * Math.cos(theta1 - phi) * (m1 - m2) + 2 * m2 * v2 * Math.cos(theta2 - phi)) / (m1 + m2) * Math.sin(phi) + v1 * Math.sin(theta1 - phi) * Math.sin(phi + Math.PI / 2);
-        let dx2F = (v2 * Math.cos(theta2 - phi) * (m2 - m1) + 2 * m1 * v1 * Math.cos(theta1 - phi)) / (m1 + m2) * Math.cos(phi) + v2 * Math.sin(theta2 - phi) * Math.cos(phi + Math.PI / 2);
-        let dy2F = (v2 * Math.cos(theta2 - phi) * (m2 - m1) + 2 * m1 * v1 * Math.cos(theta1 - phi)) / (m1 + m2) * Math.sin(phi) + v2 * Math.sin(theta2 - phi) * Math.sin(phi + Math.PI / 2);
+        let dx1F = Math.cos(theta2 - phi) * Math.cos(phi) + Math.sin(theta1 - phi) * Math.cos(phi + Math.PI / 2);
+        let dy1F = Math.cos(theta2 - phi) * Math.sin(phi) + Math.sin(theta1 - phi) * Math.sin(phi + Math.PI / 2);
+        let dx2F = Math.cos(theta1 - phi) * Math.cos(phi) + Math.sin(theta2 - phi) * Math.cos(phi + Math.PI / 2);
+        let dy2F = Math.cos(theta1 - phi) * Math.sin(phi) + Math.sin(theta2 - phi) * Math.sin(phi + Math.PI / 2);
 
-        person1.xVel = dx1F;
-        person1.yVel = dy1F;
-        person2.xVel = dx2F;
-        person2.yVel = dy2F;
-
-        if (person1.speed < speed - .1 || person1.speed > speed + .1) {
-            person1.xVel *= (speed / person1.speed)
-            person1.yVel *= (speed / person1.speed)
-        }
-        if (person2.speed < speed - .1 || person2.speed > speed + .1) {
-            person2.xVel *= (speed / person2.speed)
-            person2.yVel *= (speed / person2.speed)
-        }
+        person1.xVel = dx1F*v1/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
+        person1.yVel = dy1F*v1/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
+        person2.xVel = dx2F*v2/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
+        person2.yVel = dy2F*v2/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
 
         staticCollision(person1, person2)
 
@@ -256,6 +245,12 @@ function reset() {
             i)
         )
     }
+    let ss = getRndInteger(0,99);
+    population[ss].xVel *=10
+    population[ss].yVel *=10
+    
+
+
     for (let i = 0; i < 2; i++) {
         population[getRndInteger(0, 99)].infectionTime = infectTime
     }
