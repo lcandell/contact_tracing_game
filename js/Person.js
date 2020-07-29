@@ -87,8 +87,6 @@ class Person {
         if (this.quarantinePos){
             this.quarantinePos.occupied = false
         }
-        population = population.filter((pers) => {
-            return pers.id !== this.id
-        })
+        delete population[this.id]
     }
 }

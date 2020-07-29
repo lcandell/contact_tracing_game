@@ -88,13 +88,15 @@ function handleClick(event) {
     let rect = theCanvas.getBoundingClientRect()
     let x = event.clientX - rect.x
     let y = event.clientY - rect.y
-    for (person of population) {
+    for (i in population) {
+        let person = population[i]
         if (x > person.x - radius && x < person.x + radius && y > person.y - radius && y < person.y + radius) {
             if (person.quarantinePos) {
                 console.log(person.contacts)
                 for (contact in person.contacts) {
-                    console.log(contact)
-                    //Need to set contacted for this id
+                    if (contact in population) {
+                        population[contact].contacted = true
+                    }
                 }
             }
             else {
@@ -103,9 +105,6 @@ function handleClick(event) {
         }
 
     }
-    //console.log(event)
-    //console.log(x + ", " + y)
-    //console.log(infectChance)
 }
 
 function ballCollision(person1, person2) {
@@ -197,21 +196,23 @@ function infect(person1, person2) {
 }
 
 function logContacts() {
-    for (let i = 0; i < population.length; i++) {
-        for (let j = i + 1; j < population.length; j++) {
-            if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
-                population[i].addContact(population[j].id)
-                population[j].addContact(population[i].id)
-                ballCollision(population[i], population[j])
-                infect(population[i], population[j])
+    for (i in population) {
+        for (j in population) {
+            if (i!=j){
+                if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
+                    population[i].addContact(j)
+                    population[j].addContact(i)
+                    ballCollision(population[i], population[j])
+                    infect(population[i], population[j])
+                }
             }
         }
     }
 }
 
 function testPeople() {
-    for (let i = day % testInterval; i < population.length; i += testInterval) {
-        if (population[i].infectionTime > 0) {
+    for (i in population) {
+        if ((day-i)%testInterval==0 && population[i].infectionTime > 0) {
             population[i].tested = true
             if (!population[i].quarantinePos) {
                 quarantinePers(population[i])
@@ -256,14 +257,13 @@ function drawBackground() {
 }
 
 function reset() {
-    population = []
+    population = {}
     for (let i = 0; i < 100; i++) {
-        population.push(new Person(
+        population[i]=new Person(
             10 + radius + 50 * (i % 10),
             10 + radius + 50 * Math.floor(i / 10),
             getRndInteger(1, 360),
             i)
-        )
     }
     for (let i = 0; i < 2; i++) {
         population[getRndInteger(0, 99)].infectionTime = infectTime
@@ -285,15 +285,15 @@ function reset() {
 function drawCanvas() {
 
     drawBackground()
-    for (person of population) {
-        person.move()
+    for (person in population) {
+        population[person].move()
     }
     logContacts()
     incrementTime()
     window.setTimeout(drawCanvas, 1000 / fps)
 }
 
-let population = []
+let population = {}
 reset()
 theCanvas.onclick = handleClick
 document.getElementById('resetButton').onclick = reset
