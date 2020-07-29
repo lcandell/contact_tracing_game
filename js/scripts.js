@@ -198,7 +198,7 @@ function infect(person1, person2) {
 function logContacts() {
     for (i in population) {
         for (j in population) {
-            if (i!=j){
+            if (i<j){
                 if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
                     population[i].addContact(j)
                     population[j].addContact(i)
@@ -285,8 +285,18 @@ function reset() {
 function drawCanvas() {
 
     drawBackground()
-    for (person in population) {
-        population[person].move()
+    for (pid in population) {
+        let person = population[pid]
+        person.move()
+        //Remove from population if appropriate
+        if (person.infectionTime > 0) {
+            if (--person.infectionTime === 0) {
+                if (person.quarantinePos) {
+                    person.quarantinePos.occupied = false
+                }
+                delete population[pid]
+            }
+        }
     }
     logContacts()
     incrementTime()

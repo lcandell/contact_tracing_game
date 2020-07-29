@@ -4,7 +4,7 @@ class Person {
         this.y = y;
         this.xVel = speed*Math.cos(angle*Math.PI/180)
         this.yVel = speed*Math.sin(angle*Math.PI/180)
-        this.id = id
+        //this.id = id  ...now is the key in the population object
         this.contacts = {}
         this.color = 'red'
         this.isMoving = true
@@ -64,13 +64,6 @@ class Person {
             }
         }
         this.draw();
-        if (this.infectionTime > 0) {
-            this.infectionTime--
-            if (this.infectionTime === 0) {
-                this.remove()
-            }
-        }
-
     }
 
     //log contact
@@ -83,10 +76,4 @@ class Person {
         }
     }
 
-    remove() {
-        if (this.quarantinePos){
-            this.quarantinePos.occupied = false
-        }
-        delete population[this.id]
-    }
 }
