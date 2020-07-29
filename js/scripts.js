@@ -90,7 +90,16 @@ function handleClick(event) {
     let y = event.clientY - rect.y
     for (person of population) {
         if (x > person.x - radius && x < person.x + radius && y > person.y - radius && y < person.y + radius) {
-            quarantinePers(person)
+            if (person.quarantinePos) {
+                console.log(person.contacts)
+                for (contact in person.contacts) {
+                    console.log(contact)
+                    //Need to set contacted for this id
+                }
+            }
+            else {
+                quarantinePers(person)
+            }
         }
 
     }
@@ -191,8 +200,8 @@ function logContacts() {
     for (let i = 0; i < population.length; i++) {
         for (let j = i + 1; j < population.length; j++) {
             if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
-                population[i].addContact(j)
-                population[j].addContact(i)
+                population[i].addContact(population[j].id)
+                population[j].addContact(population[i].id)
                 ballCollision(population[i], population[j])
                 infect(population[i], population[j])
             }

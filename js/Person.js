@@ -11,6 +11,7 @@ class Person {
         this.infectionTime = 0
         this.quarantinePos = false
         this.tested = false
+        this.contacted = false
     }
 
     get angle(){
@@ -25,7 +26,10 @@ class Person {
     draw() {
         if (this.tested) {
             this.color = 'red'
-        } else {
+        } else if (this.contacted) {
+            this.color = 'yellow'
+        }    
+        else {
             this.color = '#7da7ab'
         }
         theContext.beginPath();
