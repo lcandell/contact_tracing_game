@@ -30,23 +30,23 @@
                 <h2 title="Set sliders to control epidemic and test approach">Parameters</h2>
                 <button id='resetButton'>Reset</button>
         
-                <h4>Probablity of infecting: <span id="infectValue"></span></h4>
+                <h4 title="Chance of a contact leading to infection">Probablity of infecting: <span id="infectValue"></span></h4>
                 <div class="slidecontainer">
                     <input type="range" min="0" max="1" value=".5" class="slider" step=".01" id="infect" oninput="updateInfection(this.value)">
                 </div>
-                <h4>Interaction Rate: <span id="interactRate"></span></h4>
+                <h4 title="Sets rate of contacts">Interaction Rate: <span id="interactRate"></span></h4>
                 <div class="slidecontainer">
                     <input type="range" min="0.1" max="5" value="1.5" class="slider" step=".1" id="rate" oninput="updateRate(this.value)">
                 </div>
-                <h4>Infectious period: <span id="periodValue"></span> seconds</h4>
+                <h4 title="How long infection lasts">Infectious period: <span id="periodValue"></span> seconds</h4>
                 <div class="slidecontainer">
                     <input type="range" min="0" max="100" value="20" class="slider" id="period" oninput="updatePeriod(this.value)">
                 </div>
-                <h4>Testing: <span id="testingValue"></span></h4>
+                <h4 title="Fraction of cases that get a test">Testing: <span id="testingValue"></span></h4>
                 <div class="slidecontainer">
                     <input type="range" min="0" max="1" value=".5" class="slider" step=".01" id="testing" oninput="updateTest(this.value)">
                 </div>
-                <h4>Periodic Test Interval (seconds): <span id="testInt"></span></h4>
+                <h4 title="Automated testing and quarantine on positive">Periodic Test Interval (seconds): <span id="testInt"></span></h4>
                 <div class="slidecontainer">
                     <input type="range" min="0" max="60" value="0" class="slider" step="1" id="testPer" oninput="updateTestPer(this.value)">
                 </div>
