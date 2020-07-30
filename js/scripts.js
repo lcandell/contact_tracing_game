@@ -114,16 +114,18 @@ function ballCollision(person1, person2) {
         let theta1 = person1.angle;
         let theta2 = person2.angle;
         let phi = Math.atan2(person2.y - person1.y, person2.x - person1.x);
+        v1 = person1.speed;
+        v2 = person2.speed;
 
         let dx1F = Math.cos(theta2 - phi) * Math.cos(phi) - Math.sin(theta1 - phi) * Math.sin(phi);
         let dy1F = Math.cos(theta2 - phi) * Math.sin(phi) + Math.sin(theta1 - phi) * Math.cos(phi);
         let dx2F = Math.cos(theta1 - phi) * Math.cos(phi) - Math.sin(theta2 - phi) * Math.sin(phi);
         let dy2F = Math.cos(theta1 - phi) * Math.sin(phi) + Math.sin(theta2 - phi) * Math.cos(phi);
 
-        person1.xVel = dx1F*speed/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
-        person1.yVel = dy1F*speed/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
-        person2.xVel = dx2F*speed/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
-        person2.yVel = dy2F*speed/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
+        person1.xVel = dx1F*v1/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
+        person1.yVel = dy1F*v1/Math.sqrt(dx1F*dx1F+dy1F*dy1F);
+        person2.xVel = dx2F*v2/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
+        person2.yVel = dy2F*v2/Math.sqrt(dx2F*dx2F+dy2F*dy2F);
 
         staticCollision(person1, person2)
 
