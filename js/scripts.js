@@ -257,6 +257,11 @@ function reset() {
     for (let i = 0; i < 2; i++) {
         population[getRndInteger(0, 99)].infectionTime = infectTime
     }
+
+    let superSpreader=getRndInteger(0,99);
+    //population[superSpreader].xVel *= 10;
+    //population[superSpreader].yVel *= 10;
+
     for (spot of quarantineSpots) {
         spot.occupied = false
     }
