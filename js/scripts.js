@@ -1,24 +1,29 @@
-document.getElementById("infectValue").innerHTML = document.getElementById("infect").value;
-document.getElementById("periodValue").innerHTML = document.getElementById("period").value;
-document.getElementById("testingValue").innerHTML = document.getElementById("testing").value;
-document.getElementById("interactRate").innerHTML = document.getElementById("rate").value;
-document.getElementById("testInt").innerHTML = document.getElementById("testPer").value;
-
 let theCanvas = document.getElementById("theCanvas");
 let theContext = theCanvas.getContext("2d");
 let graph = document.getElementById("graph")
 let graphContext = graph.getContext("2d")
-let testInterval = parseInt(document.getElementById("testPer").value)
-let doTesting = (testInterval > 0)
+
 const radius = 12
 const fps = 10
 const quarantineStart = 500
-let infectChance = document.getElementById("infect").value
-let testChance = document.getElementById("testing").value
-let infectTime = document.getElementById("period").value * fps
 let quarantineFull = false
 const quarantineSpots = []
-let speed = document.getElementById("rate").value
+
+var testInterval, doTesting
+updateTestPer(document.getElementById("testPer").value)
+
+var infectChance
+updateInfection(document.getElementById("infect").value)
+
+var testChance
+updateTest(document.getElementById("testing").value)
+
+var infectTime
+updatePeriod(document.getElementById("period").value)
+
+var speed
+updateRate(document.getElementById("rate").value)
+
 let time = 0
 let day = 1
 const todayInfects = {
@@ -39,28 +44,28 @@ function getRndInteger(min, max) {
 }
 
 function updateInfection(value) {
-    infectChance = document.getElementById("infect").value
+    infectChance = value
     document.getElementById("infectValue").innerHTML = infectChance
 }
 
 function updatePeriod(value) {
-    infectTime = document.getElementById("period").value * fps
+    infectTime = value * fps
     document.getElementById("periodValue").innerHTML = document.getElementById("period").value
 }
 
 function updateTest(value) {
-    testChance = document.getElementById("testing").value
+    testChance = value
     document.getElementById("testingValue").innerHTML = testChance
 }
 
 function updateTestPer(value) {
-    testInterval = parseInt(document.getElementById("testPer").value);
+    testInterval = parseInt(value);
     doTesting = (testInterval > 0);
     document.getElementById("testInt").innerHTML = doTesting ? testInterval : "Off";
 }
 
 function updateRate(value) {
-    speed = document.getElementById("rate").value
+    speed = value
     document.getElementById("interactRate").innerHTML = speed
 }
 
@@ -114,8 +119,9 @@ function ballCollision(person1, person2) {
         let theta1 = person1.angle;
         let theta2 = person2.angle;
         let phi = Math.atan2(person2.y - person1.y, person2.x - person1.x);
-        v1 = person1.speed;
-        v2 = person2.speed;
+        //keep speed set to slider for now (superspreader needs rethink)
+        v1 = speed;//person1.speed;
+        v2 = speed;//person2.speed;
 
         let dx1F = Math.cos(theta2 - phi) * Math.cos(phi) - Math.sin(theta1 - phi) * Math.sin(phi);
         let dy1F = Math.cos(theta2 - phi) * Math.sin(phi) + Math.sin(theta1 - phi) * Math.cos(phi);
