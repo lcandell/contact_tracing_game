@@ -99,7 +99,7 @@ function handleClick(event) {
             if (person.quarantinePos) {
                 console.log(person.contacts)
                 for (contact in person.contacts) {
-                    if (contact in population) {
+                    if (contact in population && time-person.contacts[contact]<=infectTime) {
                         population[contact].contacted = true
                     }
                 }
@@ -195,8 +195,8 @@ function logContacts() {
         for (j in population) {
             if (i<j){
                 if (population[i].isMoving && population[j].isMoving && findDist(population[i], population[j]) <= 2 * radius) {
-                    population[i].addContact(j)
-                    population[j].addContact(i)
+                    population[i].addContact(j,time)
+                    population[j].addContact(i,time)
                     ballCollision(population[i], population[j])
                     infect(population[i], population[j])
                 }

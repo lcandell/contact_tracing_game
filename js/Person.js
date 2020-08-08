@@ -67,13 +67,14 @@ class Person {
     }
 
     //log contact
-    addContact(id) {
+    addContact(id,time) {
         //const key= String(id)
-        if (this.contacts[id]) {
-            this.contacts[id]++
-        } else {
-            this.contacts[id] = 1
-        }
+        this.contacts[id]=time;
+        //if (this.contacts[id]) {
+        //    this.contacts[id]++
+       // } else {
+         //   this.contacts[id] = 1
+       // }
     }
 
 }
