@@ -43,14 +43,20 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function updateR0() {
+    document.getElementById("R0").innerHTML = "R0 = "+(infectChance*speed/60*infectTime).toFixed(2).toString()
+}
+
 function updateInfection(value) {
     infectChance = value
     document.getElementById("infectValue").innerHTML = infectChance
+    updateR0()
 }
 
 function updatePeriod(value) {
     infectTime = value * fps
     document.getElementById("periodValue").innerHTML = document.getElementById("period").value
+    updateR0()
 }
 
 function updateTest(value) {
@@ -67,6 +73,8 @@ function updateTestPer(value) {
 function updateRate(value) {
     speed = value
     document.getElementById("interactRate").innerHTML = speed
+    speed *=6
+    updateR0()
 }
 
 function quarantinePers(person) {
