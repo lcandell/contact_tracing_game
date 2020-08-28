@@ -8,6 +8,7 @@ const fps = 10
 const quarantineStart = 500
 let quarantineFull = false
 const quarantineSpots = []
+const urlParams = new URLSearchParams(window.location.search);
 
 var testInterval, doTesting
 updateTestPer(document.getElementById("testPer").value)
@@ -128,8 +129,8 @@ function ballCollision(person1, person2) {
         let theta2 = person2.angle;
         let phi = Math.atan2(person2.y - person1.y, person2.x - person1.x);
         //keep speed set to slider for now (superspreader needs rethink)
-        v1 = speed;//person1.speed;
-        v2 = speed;//person2.speed;
+        v1 = person1.speed;
+        v2 = person2.speed;
 
         let dx1F = Math.cos(theta2 - phi) * Math.cos(phi) - Math.sin(theta1 - phi) * Math.sin(phi);
         let dy1F = Math.cos(theta2 - phi) * Math.sin(phi) + Math.sin(theta1 - phi) * Math.cos(phi);
@@ -273,8 +274,12 @@ function reset() {
     }
 
     let superSpreader=getRndInteger(0,99);
-    //population[superSpreader].xVel *= 10;
-    //population[superSpreader].yVel *= 10;
+    if (urlParams.get("sprspeed")) {
+        sps=urlParams.get("sprspeed");
+        console.log(sps)
+        population[superSpreader].xVel *= sps;
+        population[superSpreader].yVel *= sps;
+    }
 
     for (spot of quarantineSpots) {
         spot.occupied = false
