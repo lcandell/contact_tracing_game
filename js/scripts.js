@@ -45,7 +45,7 @@ function getRndInteger(min, max) {
 }
 
 function updateR0() {
-    document.getElementById("R0").innerHTML = "R0 = "+(infectChance*speed/60*infectTime).toFixed(2).toString()
+    document.getElementById("R0").innerHTML = "R0 = "+(infectChance*speed/40*infectTime).toFixed(2).toString()
 }
 
 function updateInfection(value) {
@@ -74,7 +74,7 @@ function updateTestPer(value) {
 function updateRate(value) {
     speed = value
     document.getElementById("interactRate").innerHTML = speed
-    speed *=6
+    speed *=4
     updateR0()
 }
 
@@ -307,6 +307,8 @@ function drawCanvas() {
                 if (person.quarantinePos) {
                     person.quarantinePos.occupied = false
                 }
+                //Get rough stats on contacts during infectious period
+                //console.log(pid,Object.entries(person.contacts).filter(([k,v]) => v>time-infectTime).length);
                 delete population[pid]
             }
         }

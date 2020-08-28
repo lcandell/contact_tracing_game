@@ -2,8 +2,8 @@ class Person {
     constructor(x, y, angle,id) {
         this.x = x;
         this.y = y;
-        this.xVel = speed*Math.cos(angle*Math.PI/180)
-        this.yVel = speed*Math.sin(angle*Math.PI/180)
+        this.xVel = Math.cos(angle*Math.PI/180)
+        this.yVel = Math.sin(angle*Math.PI/180)
         //this.id = id  ...now is the key in the population object
         this.contacts = {}
         this.color = 'red'
@@ -41,8 +41,8 @@ class Person {
     //move projectile
     move() {
         if (this.isMoving) {
-            this.x += this.xVel;
-            this.y += this.yVel;
+            this.x += speed*this.xVel;
+            this.y += speed*this.yVel;
             if (this.x < radius) {
                 if (this.xVel < 0) {
                     this.xVel = -this.xVel
