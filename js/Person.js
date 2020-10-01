@@ -12,15 +12,13 @@ class Person {
         this.quarantinePos = false
         this.tested = false
         this.contacted = false
+        this.speed = 1
     }
 
     get angle(){
         return Math.atan2(this.yVel, this.xVel)
     }
 
-    get speed(){
-        return Math.sqrt(Math.pow(this.xVel,2)+Math.pow(this.yVel,2))
-    }
 
     //draw projectile
     draw() {
@@ -41,8 +39,8 @@ class Person {
     //move projectile
     move() {
         if (this.isMoving) {
-            this.x += speed*this.xVel;
-            this.y += speed*this.yVel;
+            this.x += speed*this.speed*this.xVel;
+            this.y += speed*this.speed*this.yVel;
             if (this.x < radius) {
                 if (this.xVel < 0) {
                     this.xVel = -this.xVel
