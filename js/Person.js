@@ -12,6 +12,7 @@ class Person {
         this.quarantinePos = false
         this.tested = false
         this.contacted = false
+        this.vulnerable=false
         this.speed = 1
     }
 
@@ -26,7 +27,9 @@ class Person {
             this.color = 'red'
         } else if (this.contacted) {
             this.color = 'yellow'
-        }    
+        }
+        else if (this.vulnerable)
+            this.color='purple'    
         else {
             this.color = '#7da7ab'
         }

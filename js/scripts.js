@@ -278,6 +278,13 @@ function reset() {
         console.log(sps)
         population[superSpreader].speed *= sps;
     }
+    vcnt = urlParams.get("vulnerable")
+    if (vcnt) {
+        while (vcnt--) {
+            let v = getRndInteger(0,99)
+            population[v].vulnerable = true
+        }
+    }
 
     for (spot of quarantineSpots) {
         spot.occupied = false
